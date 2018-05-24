@@ -31,7 +31,7 @@
           <v-date-picker locale="fr" first-day-of-week="1" v-model="enddate" actions>
             <v-spacer></v-spacer>
             <v-btn flat color="primary" @click="modal2 = false">Cancel</v-btn>
-            <v-btn flat color="primary" @click="$refs.dialog2.save(enddate)">OK</v-btn>
+            <v-btn flat color="primary" @click="$refs.dialog2.save(enddate)" v-on:click="setDayRange(startdate, enddate)">OK</v-btn>
           </v-date-picker>
         </v-dialog>
       </v-flex>
@@ -40,7 +40,7 @@
    <!--  confirmation of start and end hours -->
     </v-layout>
       <v-card-actions>
-        <v-btn v-on:click="setDayRange(startdate, enddate)" color="primary">Confirmez</v-btn>
+        <!-- <v-btn v-on:click="setDayRange(startdate, enddate)" color="primary">Confirmez</v-btn> -->
       </v-card-actions>
     </v-card>
   </v-container>

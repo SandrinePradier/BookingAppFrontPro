@@ -29,7 +29,7 @@
           <v-time-picker v-model="endtime" actions>
             <v-spacer></v-spacer>
             <v-btn flat color="primary" @click="modal2 = false">Cancel</v-btn>
-            <v-btn flat color="primary" @click="$refs.dialog2.save(endtime)">OK</v-btn>
+            <v-btn flat color="primary" <v-btn v-on:click="setOpeningHours(starttime, endtime)"@click="$refs.dialog2.save(endtime)">OK</v-btn>
           </v-time-picker>
         </v-dialog>
       </v-flex>
@@ -38,7 +38,7 @@
    <!--  confirmation of start and end hours -->
     </v-layout>
       <v-card-actions>
-        <v-btn v-on:click="setOpeningHours(starttime, endtime)" color="primary">Confirmez</v-btn>
+        <!-- <v-btn v-on:click="setOpeningHours(starttime, endtime)" color="primary">Confirmez</v-btn> -->
       </v-card-actions>
     </v-card>
   </v-container>

@@ -7,6 +7,7 @@ import Agenda from '@/components/agenda'
 import Workdays from '@/components/availabilitySettings/workdays'
 import OpeningHours from '@/components/availabilitySettings/openinghours'
 import DayRange from '@/components/availabilitySettings/dayrange'
+import ASStepper from '@/components/availabilitySettings/stepper'
 
 Vue.use(Router)
 
@@ -33,19 +34,9 @@ export default new Router({
       component: Agenda
     },
     {
-      path: '/workdays',
-      name: 'Workdays',
-      component: Workdays
-    },
-    {
-      path: '/openingHours',
-      name: 'OpeningHours',
-      component: OpeningHours
-    },
-    {
-      path: '/dayrange',
-      name: 'DayRange',
-      component: DayRange
+      path: '/availabilitysettings',
+      name: 'ASStepper',
+      component: ASStepper
     },
   ]
 })
