@@ -60,7 +60,8 @@ export default {
           { title: 'Home', icon: 'home', link:'/' },
           { title: 'Clients', icon: 'contacts', link:'/clients'},
           { title: 'Agenda', icon: 'date_range', link:'/agenda' },
-          { title: 'Log Out', icon: 'exit_to_app' },
+          { title: 'Disponibilités', icon: 'settings_applications', link:'/workdays' },
+          { title: 'Log Out', icon: 'exit_to_app' }
         ],
       drawer: null
     }

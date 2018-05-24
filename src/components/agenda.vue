@@ -1,7 +1,7 @@
 <template>
-  <div class="hello">
-    <h1>{{ $store.state.hello }}</h1>
-  </div>
+    <v-container fluid>
+    <h1>{{msg}}</h1>
+  </v-container>
 </template>
 
 <script>
@@ -10,7 +10,7 @@ export default {
   name: 'Agenda',
   data () {
     return {
-      msg: 'Welcome to Agenda'
+      msg: 'Welcome to Agenda',
     }
   }
 };

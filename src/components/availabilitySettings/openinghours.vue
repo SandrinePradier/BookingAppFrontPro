@@ -1,0 +1,98 @@
+<template>
+  <v-container>
+    <v-card flat tile style="max-width: 60%; margin: auto;">
+      <v-toolbar dark>
+      <v-flex xs12 align-end flexbox>
+       <!--  <span class="headline">Mes jours de travail</span> -->
+        <v-toolbar-title class="white--text">Horaires d'ouverture</v-toolbar-title>
+      </v-flex>
+    </v-toolbar>
+    <v-layout>
+      <v-flex xs11 sm5>
+      <v-dialog ref="dialog1" v-model="modal1" :return-value.sync="starttime" persistent lazy full-width width="290px">
+          <v-text-field slot="activator" v-model="starttime" label="Heure d'ouverture" prepend-icon="access_time" readonly ></v-text-field>
+          <v-time-picker v-model="starttime" actions>
+            <v-spacer></v-spacer>
+            <v-btn flat color="primary" @click="modal1 = false">Cancel</v-btn>
+            <v-btn flat color="primary" @click="$refs.dialog1.save(starttime)">OK</v-btn>
+          </v-time-picker>
+        </v-dialog>
+    </v-flex>
+  </v-layout>
+    </v-layout>
+
+    <!-- closing hour -->
+    <v-layout>
+      <v-flex xs11 sm5>
+        <v-dialog ref="dialog2" v-model="modal2" :return-value.sync="endtime" persistent lazy full-width width="290px">
+          <v-text-field slot="activator" v-model="endtime" label="Heure de fermeture" prepend-icon="access_time" readonly ></v-text-field>
+          <v-time-picker v-model="endtime" actions>
+            <v-spacer></v-spacer>
+            <v-btn flat color="primary" @click="modal2 = false">Cancel</v-btn>
+            <v-btn flat color="primary" @click="$refs.dialog2.save(endtime)">OK</v-btn>
+          </v-time-picker>
+        </v-dialog>
+      </v-flex>
+    </v-layout>
+
+   <!--  confirmation of start and end hours -->
+    </v-layout>
+      <v-card-actions>
+        <v-btn v-on:click="setOpeningHours(starttime, endtime)" color="primary">Confirmez</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-container>
+</template>
+
+<script>
+
+import { store } from './../../store/store'
+import http from './../../helpers/http'
+import moment from 'moment'
+import 'moment/locale/fr'
+
+export default {
+  name: 'OpeningHours',
+  data () {
+    return {
+      msg: 'Welcome to OpeningHours',
+      starttime: null,
+      endtime: null,
+      menu1:false,
+      modal1:false,
+      menu2: false,
+      modal2: false,
+      }
+    },
+    methods:{
+      setOpeningHours(start, end){
+        console.log ('je suis disponible entre : ' + start + ' et ' + end );
+        let openingHours = {
+          start: start,
+          end: end
+        }
+        this.$store.commit('getOpeningHours', openingHours);
+      }
+    }
+
+  
+};
+</script>
+
+
+<style scoped>
+h1, h2 {
+  font-weight: normal;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
+}
+</style>
