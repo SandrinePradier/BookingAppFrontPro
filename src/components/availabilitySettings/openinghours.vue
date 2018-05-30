@@ -1,12 +1,8 @@
 <template>
   <v-container>
     <v-card flat tile style="max-width: 60%; margin: auto;">
-      <v-toolbar dark>
-      <v-flex xs12 align-end flexbox>
-       <!--  <span class="headline">Mes jours de travail</span> -->
-        <v-toolbar-title class="white--text">Horaires d'ouverture</v-toolbar-title>
-      </v-flex>
-    </v-toolbar>
+
+    <!-- starting hour -->
     <v-layout>
       <v-flex xs11 sm5>
       <v-dialog ref="dialog1" v-model="modal1" :return-value.sync="starttime" persistent lazy full-width width="290px">
@@ -72,6 +68,7 @@ export default {
           end: end
         }
         this.$store.commit('getOpeningHours', openingHours);
+        console.log('j envoie au store mes horaires d ouverture');
       }
     }
 

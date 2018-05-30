@@ -1,12 +1,6 @@
 <template>
   <v-container>
     <v-card flat tile style="max-width: 60%; margin: auto;">
-      <v-toolbar dark>
-      <v-flex xs12 align-end flexbox>
-       <!--  <span class="headline">Mes jours de travail</span> -->
-        <v-toolbar-title class="white--text">Appliquer les disponibilités à la période</v-toolbar-title>
-      </v-flex>
-    </v-toolbar>
 
    <!--  starting date -->
     <v-layout>
@@ -50,6 +44,7 @@
 
 import { store } from './../../store/store'
 import http from './../../helpers/http'
+import * as time from './../../helpers/time'
 import moment from 'moment'
 import 'moment/locale/fr'
 
@@ -71,9 +66,11 @@ export default {
         console.log ('j applique mes disponibilités entre : ' + start + ' et ' + end );
         let dayRange = {
           start: start,
-          end: end
+          end: end,
+          daylist: time.getDaysOfTheTimeRange(start, end)
         };
         this.$store.commit('getDayRange', dayRange);
+        console.log('je viens d envoyer la dayrange au store')
       }
     },
     filters:{

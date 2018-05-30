@@ -31,12 +31,12 @@
         <router-link to="/" tag="span" style="cursor:pointer">My Booking App</router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-toolbar-items class="hidden-sm-and-down">
             <v-btn icon>
               <v-icon>search</v-icon>
             </v-btn>
-            <v-btn icon v-on:click="logOut()"><v-icon>exit_to_app</v-icon></v-btn>
-      </v-toolbar-items>
+            <v-btn icon v-on:click="logOut()">
+              <v-icon>exit_to_app</v-icon>
+            </v-btn>
     </v-toolbar>
 
     <!-- main display -->
