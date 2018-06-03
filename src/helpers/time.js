@@ -12,8 +12,14 @@ import _ from 'underscore';
 
 //return an array with days as moment object for a given time range
 function getDaysOfTheTimeRange(start,end){
-	 let arr = moment(start).twix(end).toArray('days');
-	 return arr;
+	if (moment(end).isAfter(moment(start))){
+		let arr = moment(start).twix(end).toArray('days');
+		return arr
+	}
+	else{
+		let arr = moment(end).twix(start).toArray('days');
+		return arr
+	}
 }
 
 // return the name of the day of a moment date

@@ -1,37 +1,42 @@
 <template>
-    <v-container fluid>
-    <v-toolbar dense>
-      <!-- <v-toolbar-side-icon></v-toolbar-side-icon> -->
-      <v-toolbar-title>Agenda</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn icon v-on:click="getPreviousDays">
-        <v-icon>navigate_before</v-icon>
-      </v-btn>
+  <v-container fluid class="backgound">
+    <v-card flat>
+
+      <v-toolbar color="green lighten-5"flat dense>
+        <v-toolbar-title>Agenda</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn icon v-on:click="getPreviousDays">
+          <v-icon>navigate_before</v-icon>
+        </v-btn>
         <h3>Semaine {{weekNumber}}</h3>
-      <v-btn icon v-on:click="getNextDays">
-        <v-icon>navigate_next</v-icon>
-      </v-btn>
-    </v-toolbar>
+        <v-btn icon v-on:click="getNextDays">
+          <v-icon>navigate_next</v-icon>
+        </v-btn>
+      </v-toolbar>
 
-    <v-container fluid grid-list class="agendaBody">
-
-      <v-layout row wrap justify-space-between class="agendaBodyDays">
-        <v-flex xs12 sm4 md1 lg1 xl1 class="day" v-for="(day,index) in timeRangeToDisplay" :key="index">
-          <v-flex class="dayName">{{day | dateFormatDayName}}</v-flex>
-          <v-flex class="dayNumber">{{day | dateFormatDayNumberAndMonth}}</v-flex>
-           <ul class="slotUl" v-for="(button, index) in btnIdToDisplay" v-if="buttonIdIsInDay(day,button)" :key="index">
-            <li class="slotLi">
-              <v-btn small outline v-bind:color="getColor[index]" v-on:click="getMatchingSlot(button,slots)" v-bind:class="classId[index]" v-bind:id="button" >
-                <li class="slotLi__button_id">{{button.id | displayButtonId }}</li>
+      <v-container fluid grid-list >
+        <v-layout fluid row wrap justify-center>
+          
+          <v-flex justify-center xs12 sm4 md1 lg1 xl1 class="day" v-for="(day,index) in timeRangeToDisplay" :key="index">
+            <v-flex class="dayName">{{day | dateFormatDayName}}</v-flex>
+            <v-flex class="dayNumber">{{day | dateFormatDayNumberAndMonth}}</v-flex>
+            <ul class="slotUl" v-for="(button, index) in btnIdToDisplay" v-if="buttonIdIsInDay(day,button)" :key="index">
+              <li class="slotLi">
+                <v-btn outline 
+                v-bind:color="btnColor[index]" 
+                v-bind:class="classId[index]" 
+                v-bind:id="button" 
+                v-on:click="getMatchingSlot(button,slots)"  >
+                <li class="slotLi__button_id">{{button.id | displayButtonId }} {{button.client}}</li>
               </v-btn>
             </li>
           </ul>
         </v-flex>
       </v-layout>
-
     </v-container>
 
-  </v-container>
+  </v-card>
+</v-container>
 </template>
 
 <script>
@@ -79,10 +84,18 @@ export default {
         return button.class;
       });
     },
-    getColor(){
+    btnColor(){
       return this.btnIdToDisplay.map(function(button){
         return button.color;
       })
+    },
+    btnClient(){
+      return this.btnIdToDisplay.map(function(button){
+        return button.client;
+      })
+    },
+    getClients(){
+      return this.$store.state.clients;
     }
   },
   created(){
@@ -96,7 +109,7 @@ export default {
       this.commit();
       this.getTimeRange();
       this.createButtonId(this.timeRange);
-      this.updateButtonId(this.slots, this.buttonIdList);
+      this.updateButtonId(this.slots, this.buttonIdList, this.getClients);
     })
     .catch(error => {
       console.log( 'error:', error);
@@ -137,7 +150,8 @@ export default {
           let button = {
             id: id,
             class:'N',
-            color: 'grey'
+            color: 'grey',
+            client:''
             // aptFullName:'',
             // aptType:'',
             // aptId:'',
@@ -148,7 +162,7 @@ export default {
       }
       return this.buttonIdList;
     },
-    updateButtonId: function(slots, idList){
+    updateButtonId: function(slots, idList, clients){
       //this function will update ButtonID based on slots status, and modify the buttonsID accordingly
       for (let i=0; i<slots.length; i++){
         for (let j=0; j<idList.length; j++){
@@ -158,18 +172,27 @@ export default {
             if(slots[i].status === 'available'){
               idList[j].id = idList[j].id.slice(0,16)+'-'+'A';
               idList[j].class = 'A';
-              idList[j].color = 'green';
+              idList[j].color = 'teal accent-2';
+
             }
             if(slots[i].status === 'booked'){
               idList[j].id = idList[j].id.slice(0,16)+'-'+'B';
               idList[j].class = 'B';
-              idList[j].color = 'grey';
+              idList[j].color = 'deep-purple ';
+              for (let k=0; k<clients.length; k++){
+                let apt = moment(clients[k].time).format('YYYY-MM-DD-HH-mm').toString();
+                console.log('apt:', apt)
+                if (id == apt){
+                  console.log('matching found: ', clients[k])
+                  idList[j].client = clients[k].lastname;
+                }
+              }
             }
           }
         }
       }
-      console.log('les boutons ont bien été updatés avec les slots');
-      console.log('buttonIdList:', this.buttonIdList);
+      // console.log('les boutons ont bien été updatés avec les slots');
+      // console.log('buttonIdList:', this.buttonIdList);
       // this.cleanButtonId(this.buttonIdList);
       // this.cleanButtonId(this.buttonIdList);
       return this.buttonIdList;
@@ -185,7 +208,7 @@ export default {
           }
         }
       }
-      console.log('this.filteredButtonIdList:', this.filteredButtonIdList)
+      // console.log('this.filteredButtonIdList:', this.filteredButtonIdList)
       return this.filteredButtonIdList;
     },
     buttonIdIsInDay: function(day,btn){
@@ -204,13 +227,11 @@ export default {
           if (sl == id){
             this.matchingSlot = slots[i];
             console.log('the matching slot is:', this.matchingSlot);
-            // this.getRelevantModal(btn);
           }
           else {
             console.log('no matching slot');
             //si aucun matching slot n'est trouvé, 
             //c'est que le boutton est en N
-            //alors on peut lui proposer de passer en A
           }
         }
     },
@@ -236,34 +257,142 @@ export default {
 
 
 <style scoped>
-h1, h2 {
+
+.backgound{
+  color: #606060;
+}
+
+
+h1, h2{
   font-weight: normal;
+  color: #404040;
 }
-/*h4 {
-  padding-left: 20px;
-  padding-right: 60px;
-}*/
-ul {
-  list-style-type: none;
+
+h3{
+  color: #404040;
+}
+
+
+
+.day{
+  min-width: 13%;
+  /*background-color: pink;*/
   padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+  margin: 0;
 }
 
-/*.A{
+
+.dayName{
+  /*font-weight: bold*/
+  color: #606060;
+/*background-color: purple;
+*/}
+
+.dayNumber{
+  color: #606060;
+  /*font-weight: bold*/
+/*background-color: green;*/
+}
+
+.slotUl{
+/*background-color: blue;*/
+width: 100%;
+list-style-type: none;
   padding: 0;
-  min-width: 0;
+  margin: 0;
+}
+
+
+.A{
+  border-top: 1px dotted #e5e5e5;
+  border-bottom:1px dotted #e5e5e5;
+  border-left: 10px solid #64FFDA;
+  border-right: 1px solid #d4d4d4;
+  /*background-color: white;*/
+  /*color:grey;*/
+  border-radius:0;
+  width: 100%;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  margin-left:0px;
+  font-size: 10px;
+  /*text-align: right;*/
+  vertical-align: top
+}
+
+.N{
+  border-top: 1px dotted #e5e5e5;
+  border-bottom:1px dotted #e5e5e5;
+  border-left: 1px solid #d4d4d4;
+  border-right: 1px solid #d4d4d4;
+  /*box-shadow: none;*/
+  /*box-shadow: 0.5rem 1rem 1rem rgba(0, 0, 0, 0.1);*/
+ /* background-color: grey;*/
+  /*color:grey;*/
+  border-radius:0;
+  width: 100%;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  margin-left:0px;
+  font-size: 8px;
+  /*text-align: right;*/
+  vertical-align: top;
+}
+
+.B{
+  border-top: 1px dotted #e5e5e5;
+  border-bottom:1px dotted #e5e5e5;
+  border-left: 10px solid #673AB7;
+  border-right: 1px solid #d4d4d4;
+  /*background-color: yellow;*/
+  /*color:grey;*/
+  border-radius:0;
+  width: 100%;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  margin-left:0px;
+  font-size: 10px;
+  /*text-align: right;*/
+  vertical-align: top;
+}
+
+.slotLi{
+  /*background-color: transparent;*/
+  width: 100%;
+}
+
+.slotLi__button_id{
+  text-align: left;
+  width: 100%;
+}
+
+
+
+/*{
+  primary: "#64FFDA",
+  secondary: "#E8F5E9",
+  accent: "#64FFDA",
+  error: "#FF5722",
+  warning: "#ffeb3b",
+  info: "#009688",
+  success: "#4CAF50"
+}
+*/
+/*{
+  primary: colors.teal.accent2,
+  secondary: colors.green.lighten5,
+  accent: colors.teal.accent2,
+  error: colors.deepOrange.base,
+  warning: colors.yellow.base,
+  info: colors.teal.base,
+  success: colors.green.base
 }*/
 
+/*gris à essayer:
+#606060 rgb(96,96,96)
+#686868 rgb(104,104,104)
+#696969 rgb(105,105,105)*/
 
 
 
-/*.agendaBodyDays {
-  background-color: pink;
-}*/
 </style>

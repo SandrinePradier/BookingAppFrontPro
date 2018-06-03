@@ -6,8 +6,8 @@
     <v-layout>
       <v-flex xs11 sm5>
       <v-dialog ref="dialog1" v-model="modal1" :return-value.sync="starttime" persistent lazy full-width width="290px">
-          <v-text-field slot="activator" v-model="starttime" label="Heure d'ouverture" prepend-icon="access_time" readonly ></v-text-field>
-          <v-time-picker v-model="starttime" actions>
+          <v-text-field slot="activator" v-model="openingHourStart" label="Heure d'ouverture" prepend-icon="access_time" readonly ></v-text-field>
+          <v-time-picker v-model="starttime" format="24hr" actions>
             <v-spacer></v-spacer>
             <v-btn flat color="primary" @click="modal1 = false">Cancel</v-btn>
             <v-btn flat color="primary" @click="$refs.dialog1.save(starttime)">OK</v-btn>
@@ -21,21 +21,16 @@
     <v-layout>
       <v-flex xs11 sm5>
         <v-dialog ref="dialog2" v-model="modal2" :return-value.sync="endtime" persistent lazy full-width width="290px">
-          <v-text-field slot="activator" v-model="endtime" label="Heure de fermeture" prepend-icon="access_time" readonly ></v-text-field>
-          <v-time-picker v-model="endtime" actions>
+          <v-text-field slot="activator" v-model="openingHourEnd" label="Heure de fermeture" prepend-icon="access_time" readonly ></v-text-field>
+          <v-time-picker v-model="endtime" format="24hr" actions>
             <v-spacer></v-spacer>
             <v-btn flat color="primary" @click="modal2 = false">Cancel</v-btn>
-            <v-btn flat color="primary" <v-btn v-on:click="setOpeningHours(starttime, endtime)"@click="$refs.dialog2.save(endtime)">OK</v-btn>
+            <v-btn flat color="primary" <v-btn @click="$refs.dialog2.save(endtime)">OK</v-btn>
           </v-time-picker>
         </v-dialog>
       </v-flex>
     </v-layout>
 
-   <!--  confirmation of start and end hours -->
-    </v-layout>
-      <v-card-actions>
-        <!-- <v-btn v-on:click="setOpeningHours(starttime, endtime)" color="primary">Confirmez</v-btn> -->
-      </v-card-actions>
     </v-card>
   </v-container>
 </template>
@@ -58,18 +53,48 @@ export default {
       modal1:false,
       menu2: false,
       modal2: false,
+      nextStep:2
+      }
+    },
+    computed:{
+      openingHourStart:{
+        get(){
+          let start = this.starttime;
+          console.log('test  OH get start');
+          this.$store.commit('getStartHour', start);
+          return start;
+        }
+      },
+      openingHourEnd:{
+        get(){
+          let end = this.endtime;
+          console.log('test  OH get end');
+          this.$store.commit('getEndHour', end);
+          return end;
+        }
       }
     },
     methods:{
-      setOpeningHours(start, end){
-        console.log ('je suis disponible entre : ' + start + ' et ' + end );
-        let openingHours = {
-          start: start,
-          end: end
-        }
-        this.$store.commit('getOpeningHours', openingHours);
-        console.log('j envoie au store mes horaires d ouverture');
-      }
+      // setOpeningHours(start, end){
+      //   this.nextStep = 2;
+      //   console.log ('je suis disponible entre : ' + start + ' et ' + end );
+      //   console.log('start: ', start);
+      //   console.log('end: ',end);
+
+      //   if (moment(start, 'HH:mm').isBefore(moment(end, 'HH:mm'))){
+      //     let openingHours = {
+      //       start: start,
+      //       end: end
+      //     }
+      //     this.$store.commit('getOpeningHours', openingHours);
+      //     console.log('j envoie au store mes horaires d ouverture');
+      //     this.nextStep++;
+      //     this.$store.commit('getStepperStep', this.nextStep)
+      //   }
+      //   else{
+      //     console.log('vous ne pouvez pas paraméter une heure de fin antérieure à l\'heure de début');
+      //   }
+      // }
     }
 
   
