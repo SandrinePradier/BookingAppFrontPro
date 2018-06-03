@@ -5,12 +5,19 @@
 </template>
 
 <script>
+
+import { store } from './../store/store';
+
 export default {
   name: 'Home',
   data () {
     return {
       msg: 'Welcome to Home'
     }
+  },
+  created(){
+    this.$store.dispatch('loadClients');
+    this.$store.dispatch('loadSlots');
   }
 };
 </script>

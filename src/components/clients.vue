@@ -42,8 +42,6 @@ export default {
   name: 'Clients',
   data () {
     return {
-      msg: 'Welcome to Clients',
-      clients: [],
       search: '',
       headers: [
         {
@@ -57,23 +55,10 @@ export default {
       ]
     }
   },
-  created(){
-    //we will move this call http to the store
-    http.get('/clients')
-    .then(res => {
-      console.log('res from get clients:', res);
-      this.clients = res.data.content,
-      this.commit();
-   // on passera les clients au store
-    })
-    .catch(error => {
-      console.log( 'error:', error);
-    })
-  },
-  methods:{
-    commit () {
-      this.$store.commit('storeClients', this.clients);
-    }
+  computed:{
+      clients(){
+        return this.$store.state.clients;
+      }
   },
   filters:{
     dateFormatFullDayHour: function(date){

@@ -75,26 +75,6 @@ export default {
       }
     },
     methods:{
-      // setOpeningHours(start, end){
-      //   this.nextStep = 2;
-      //   console.log ('je suis disponible entre : ' + start + ' et ' + end );
-      //   console.log('start: ', start);
-      //   console.log('end: ',end);
-
-      //   if (moment(start, 'HH:mm').isBefore(moment(end, 'HH:mm'))){
-      //     let openingHours = {
-      //       start: start,
-      //       end: end
-      //     }
-      //     this.$store.commit('getOpeningHours', openingHours);
-      //     console.log('j envoie au store mes horaires d ouverture');
-      //     this.nextStep++;
-      //     this.$store.commit('getStepperStep', this.nextStep)
-      //   }
-      //   else{
-      //     console.log('vous ne pouvez pas paraméter une heure de fin antérieure à l\'heure de début');
-      //   }
-      // }
     }
 
   

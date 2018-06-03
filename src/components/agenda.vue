@@ -55,7 +55,6 @@ export default {
       //the hourList should be generated dynamically refereing to opening hours
       hourList:['08:00','09:00',
           '10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'],
-      slots:[],
       minTimeRange:{},
       timeRange:'',
       beginDisplay:'',
@@ -96,29 +95,20 @@ export default {
     },
     getClients(){
       return this.$store.state.clients;
+    },
+    slots(){
+      return this.$store.state.slots
     }
   },
   created(){
     this.beginDisplay = 0;
     this.weekNumber = time.filterInt(this.week);
-    http.get('/slots')
-    .then(res => {
-      console.log('res from get slots:', res);
-      this.slots = res.data.content;
-      this.minTimeRange = time.GetMinTimeFromSlotsArray(res.data.content);
-      this.commit();
-      this.getTimeRange();
-      this.createButtonId(this.timeRange);
-      this.updateButtonId(this.slots, this.buttonIdList, this.getClients);
-    })
-    .catch(error => {
-      console.log( 'error:', error);
-    })
+    this.minTimeRange = time.GetMinTimeFromSlotsArray(this.slots);
+    this.getTimeRange();
+    this.createButtonId(this.timeRange);
+    this.updateButtonId(this.slots, this.buttonIdList, this.getClients);
   },
   methods:{
-    commit () {
-      this.$store.commit('storeSlots', this.slots);
-    },
     getTimeRange (){
       let nowStartWeek = time.getWeekFirstDate(moment());
       let end = time.addTwoMonth(this.minTimeRange.end);
@@ -152,10 +142,6 @@ export default {
             class:'N',
             color: 'grey',
             client:''
-            // aptFullName:'',
-            // aptType:'',
-            // aptId:'',
-            // aptDuration:''
           }
           this.buttonIdList.push(button);
         }
@@ -181,9 +167,9 @@ export default {
               idList[j].color = 'deep-purple ';
               for (let k=0; k<clients.length; k++){
                 let apt = moment(clients[k].time).format('YYYY-MM-DD-HH-mm').toString();
-                console.log('apt:', apt)
+                // console.log('apt:', apt)
                 if (id == apt){
-                  console.log('matching found: ', clients[k])
+                  // console.log('matching found: ', clients[k])
                   idList[j].client = clients[k].lastname;
                 }
               }
@@ -191,10 +177,6 @@ export default {
           }
         }
       }
-      // console.log('les boutons ont bien été updatés avec les slots');
-      // console.log('buttonIdList:', this.buttonIdList);
-      // this.cleanButtonId(this.buttonIdList);
-      // this.cleanButtonId(this.buttonIdList);
       return this.buttonIdList;
     },
     filterButtonIdToDisplay: function(timeRange, btnIdList){
@@ -208,7 +190,6 @@ export default {
           }
         }
       }
-      // console.log('this.filteredButtonIdList:', this.filteredButtonIdList)
       return this.filteredButtonIdList;
     },
     buttonIdIsInDay: function(day,btn){
@@ -227,11 +208,6 @@ export default {
           if (sl == id){
             this.matchingSlot = slots[i];
             console.log('the matching slot is:', this.matchingSlot);
-          }
-          else {
-            console.log('no matching slot');
-            //si aucun matching slot n'est trouvé, 
-            //c'est que le boutton est en N
           }
         }
     },
@@ -258,7 +234,7 @@ export default {
 
 <style scoped>
 
-.backgound{
+.background{
   color: #606060;
 }
 

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-// import * as time from './../helpers/time'
+import http from './../helpers/http'
 
 Vue.use(Vuex)
 
@@ -18,7 +18,7 @@ export const store = new Vuex.Store({
 			stepperStep:''
 		},
 		slots: [],
-		clients:[]
+		clients:''
 	},
 	getters: {
 		settings(state){
@@ -67,6 +67,27 @@ export const store = new Vuex.Store({
 		},
 	},
 	actions:{
-		//here we will make a call http to get clients.
+		loadClients(context){
+			http.get('/clients')
+		    .then(res => {
+		      console.log('res from get clients:', res);
+		      console.log('clients:', res.data.content);
+		      context.commit('storeClients', res.data.content)
+		    })
+		    .catch(error => {
+		      console.log( 'error:', error);
+		    })
+		},
+		loadSlots(context){
+			http.get('/slots')
+		    .then(res => {
+		      console.log('res from get slots:', res);
+		      console.log('slots:', res.data.content);
+		      context.commit('storeSlots', res.data.content)
+		    })
+		    .catch(error => {
+		      console.log( 'error:', error);
+		    })
+		}
 	}
 })
