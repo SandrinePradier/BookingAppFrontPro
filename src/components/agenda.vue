@@ -20,7 +20,7 @@
           <v-flex justify-center xs12 sm4 md1 lg1 xl1 class="day" v-for="(day,index) in timeRangeToDisplay" :key="index">
             <v-flex class="dayName">{{day | dateFormatDayName}}</v-flex>
             <v-flex class="dayNumber">{{day | dateFormatDayNumberAndMonth}}</v-flex>
-            <ul class="slotUl" v-for="(button, index) in btnIdToDisplay" v-if="buttonIdIsInDay(day,button)" :key="index">
+            <ul class="slotUl" v-for="(button, index) in btnIdToDisplay" v-if="buttonIdIsInDay(day,button, slots)" :key="index">
               <li class="slotLi">
                 <v-btn outline 
                 v-bind:color="btnColor[index]" 
@@ -97,16 +97,18 @@ export default {
       return this.$store.state.clients;
     },
     slots(){
-      return this.$store.state.slots
+      return this.$store.state.slots;
+      console.log('get slots called in agenda');
     }
   },
   created(){
-    this.beginDisplay = 0;
-    this.weekNumber = time.filterInt(this.week);
-    this.minTimeRange = time.GetMinTimeFromSlotsArray(this.slots);
-    this.getTimeRange();
-    this.createButtonId(this.timeRange);
-    this.updateButtonId(this.slots, this.buttonIdList, this.getClients);
+      this.$store.dispatch('loadSlots');
+      this.beginDisplay = 0;
+      this.weekNumber = time.filterInt(this.week);
+      this.minTimeRange = time.GetMinTimeFromSlotsArray(this.slots);
+      this.getTimeRange();
+      this.createButtonId(this.timeRange);
+      this.updateButtonId(this.slots, this.buttonIdList, this.getClients);
   },
   methods:{
     getTimeRange (){
@@ -149,7 +151,8 @@ export default {
       return this.buttonIdList;
     },
     updateButtonId: function(slots, idList, clients){
-      //this function will update ButtonID based on slots status, and modify the buttonsID accordingly
+      if ( this.slots){
+        //this function will update ButtonID based on slots status, and modify the buttonsID accordingly
       for (let i=0; i<slots.length; i++){
         for (let j=0; j<idList.length; j++){
           let sl = moment(slots[i].start).format('YYYY-MM-DD-HH-mm').toString();
@@ -178,6 +181,10 @@ export default {
         }
       }
       return this.buttonIdList;
+      }
+      else{
+        console.log('merci de créer vos disponibilités');
+      }
     },
     filterButtonIdToDisplay: function(timeRange, btnIdList){
       for (let i=0; i<timeRange.length; i++){
@@ -192,7 +199,7 @@ export default {
       }
       return this.filteredButtonIdList;
     },
-    buttonIdIsInDay: function(day,btn){
+    buttonIdIsInDay: function(day,btn,sl){
       // this is a conditional function, called in V-for to display under the day only the button with ID matching the day
       let a = moment(day).format('YYYY-MM-DD').toString();
       let b = btn.id.slice(0,10);

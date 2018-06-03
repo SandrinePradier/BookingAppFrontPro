@@ -178,6 +178,7 @@ import * as time from './../../helpers/time'
         http.post('/availabilities', this.slotsAvailable)
           .then(res => {
             console.log('res from get ASstepper:', res);
+             this.$store.dispatch('loadSlots');
           })
           .catch(error => {
             console.log( 'error:', error);
