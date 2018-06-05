@@ -12,13 +12,13 @@
     <template >
     <v-data-table
       :headers="headers"
-      :items="clients"
+      :items="Clients"
       :search="search"
     >
     <template slot="items" slot-scope="row">
         <td class="text-xs-left">{{ row.item.lastname }}</td>
         <td class="text-xs-left">{{ row.item.email }}</td>
-        <td class="text-xs-left">{{ row.item.time | dateFormatFullDayHour}}</td>
+        <td class="text-xs-left">{{ row.item.time }}</td>
         <td class="text-xs-left">{{ row.item.duration }} min</td>
       </template>
      
@@ -35,6 +35,7 @@
 import moment from 'moment';
 import 'moment/locale/fr';
 import { store } from './../store/store'
+import { mapGetters } from 'vuex'
 import http from './../helpers/http'
 
 
@@ -56,9 +57,15 @@ export default {
     }
   },
   computed:{
-      clients(){
-        return this.$store.state.clients;
-      }
+    ...mapGetters([
+       'Clients'
+    ])
+      // clients(){
+      //   return this.$store.state.clients;
+      // }
+  },
+  created(){
+    this.$store.dispatch('loadClients');
   },
   filters:{
     dateFormatFullDayHour: function(date){

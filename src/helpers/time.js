@@ -114,6 +114,12 @@ function getWeekNumber(date){
 	return moment(date).format('ww');
 };
 
+function getTimeRange (minTR){
+      let nowStartWeek = getWeekFirstDate(moment());
+      let end = addTwoMonth(minTR.end);
+      return getDaysOfTheTimeRange(nowStartWeek,end);
+}
+
 export {
 	getDaysOfTheTimeRange,
 	getNameOfDay,
@@ -125,5 +131,6 @@ export {
 	getWeekFirstDate,
 	addTwoMonth,
 	limitDisplay,
-	getWeekNumber
+	getWeekNumber,
+	getTimeRange
 }

@@ -17,6 +17,7 @@ export default {
   },
   created(){
     this.$store.dispatch('loadClients');
+    // this.$store.dispatch('loadSlots');
   }
 };
 </script>

@@ -20,7 +20,7 @@
           <v-flex justify-center xs12 sm4 md1 lg1 xl1 class="day" v-for="(day,index) in timeRangeToDisplay" :key="index">
             <v-flex class="dayName">{{day | dateFormatDayName}}</v-flex>
             <v-flex class="dayNumber">{{day | dateFormatDayNumberAndMonth}}</v-flex>
-            <ul class="slotUl" v-for="(button, index) in btnIdToDisplay" v-if="buttonIdIsInDay(day,button, slots)" :key="index">
+            <ul class="slotUl" v-for="(button, index) in btnIdToDisplay" v-if="buttonIdIsInDay(day,button)" :key="index">
               <li class="slotLi">
                 <v-btn outline 
                 v-bind:color="btnColor[index]" 
@@ -44,6 +44,7 @@
 import moment from 'moment'
 import 'moment/locale/fr'
 import { store } from './../store/store'
+import { mapGetters } from 'vuex'
 import http from './../helpers/http'
 import * as time from './../helpers/time'
 
@@ -58,11 +59,12 @@ export default {
       minTimeRange:{},
       timeRange:'',
       beginDisplay:'',
+      weekNumber:'',
       button:'',
       buttonIdList:[],
       filteredButtonIdList: [],
-      display:false
-      // color:'green'
+      display:false,
+      slots:[]
     }
   },
   computed:{
@@ -70,12 +72,15 @@ export default {
       return time.limitDisplay('week', this.beginDisplay);
     },
     timeRangeToDisplay(){
-      return this.getTimeRange().slice(this.beginDisplay, this.endDisplay)
+      console.log('timeRangeToDisplay OK');
+      console.log(this.timeRange.slice(this.beginDisplay, this.endDisplay));
+      return this.timeRange.slice(this.beginDisplay, this.endDisplay);
     },
     week(){
       return time.getWeekNumber(moment());
     },
     btnIdToDisplay(){
+       console.log('btnIdToDisplay OK')
       return this.filterButtonIdToDisplay(this.timeRangeToDisplay, this.buttonIdList);
     },
     classId(){
@@ -93,28 +98,36 @@ export default {
         return button.client;
       })
     },
-    getClients(){
-      return this.$store.state.clients;
-    },
-    slots(){
-      return this.$store.state.slots;
-      console.log('get slots called in agenda');
-    }
+    ...mapGetters([
+       'Clients'
+    ]),
   },
   created(){
-      this.$store.dispatch('loadSlots');
-      this.beginDisplay = 0;
-      this.weekNumber = time.filterInt(this.week);
-      this.minTimeRange = time.GetMinTimeFromSlotsArray(this.slots);
-      this.getTimeRange();
-      this.createButtonId(this.timeRange);
-      this.updateButtonId(this.slots, this.buttonIdList, this.getClients);
+    this.callHttp();
   },
   methods:{
-    getTimeRange (){
-      let nowStartWeek = time.getWeekFirstDate(moment());
-      let end = time.addTwoMonth(this.minTimeRange.end);
-      return this.timeRange = time.getDaysOfTheTimeRange(nowStartWeek,end);
+    callHttp(){
+       http.get('/slots')
+        .then(res => {
+        console.log('res from get slots:', res);
+        this.slots = res.data.content;
+        this.minTimeRange = time.GetMinTimeFromSlotsArray(res.data.content);
+        this.getTimeRange(this.minTimeRange);
+        this.setUpCalendar()
+        })
+        .catch(error => {
+        console.log( 'error:', error);
+        })
+    },
+    getTimeRange(tr){
+      return this.timeRange = time.getTimeRange(tr);
+    },
+    setUpCalendar(){
+      console.log('jpl setUpCalendar');
+      this.beginDisplay = 0;
+      this.weekNumber = time.filterInt(this.week);
+      this.createButtonId(this.timeRange);
+      this.updateButtonId(this.slots, this.buttonIdList, this.Clients);
     },
     getNextDays(){
       this.beginDisplay += 7;
@@ -148,10 +161,12 @@ export default {
           this.buttonIdList.push(button);
         }
       }
+      console.log('buttonIdList ready');
+      console.log('buttonIdList', this.buttonIdList);
       return this.buttonIdList;
     },
     updateButtonId: function(slots, idList, clients){
-      if ( this.slots){
+      if (slots){
         //this function will update ButtonID based on slots status, and modify the buttonsID accordingly
       for (let i=0; i<slots.length; i++){
         for (let j=0; j<idList.length; j++){
@@ -169,10 +184,8 @@ export default {
               idList[j].class = 'B';
               idList[j].color = 'deep-purple ';
               for (let k=0; k<clients.length; k++){
-                let apt = moment(clients[k].time).format('YYYY-MM-DD-HH-mm').toString();
-                // console.log('apt:', apt)
+                let apt = moment(clients[k].time, 'LLLL').format('YYYY-MM-DD-HH-mm').toString();
                 if (id == apt){
-                  // console.log('matching found: ', clients[k])
                   idList[j].client = clients[k].lastname;
                 }
               }
@@ -180,6 +193,8 @@ export default {
           }
         }
       }
+      console.log('buttonIdList updated ready');
+      console.log('this buttonIdList after update: ', this.buttonIdList);
       return this.buttonIdList;
       }
       else{
@@ -197,10 +212,12 @@ export default {
           }
         }
       }
+      console.log('filteredButtonList ready', this.filteredButtonIdList );
       return this.filteredButtonIdList;
     },
-    buttonIdIsInDay: function(day,btn,sl){
+    buttonIdIsInDay: function(day,btn){
       // this is a conditional function, called in V-for to display under the day only the button with ID matching the day
+      console.log('buttonIsInDay ready');
       let a = moment(day).format('YYYY-MM-DD').toString();
       let b = btn.id.slice(0,10);
       if(a == b) {

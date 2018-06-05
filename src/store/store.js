@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import http from './../helpers/http'
+import * as time from './../helpers/time'
+import moment from 'moment'
+import 'moment/locale/fr'
 
 Vue.use(Vuex)
 
@@ -17,16 +20,24 @@ export const store = new Vuex.Store({
 			dayRangeAvailable:[],
 			stepperStep:''
 		},
-		slots: [],
+		// slots: [],
+		// minTimeRange:{},
+		// timeRange:'',
 		clients:''
 	},
 	getters: {
 		settings(state){
 			return state.settings;
 		},
-		clients(state){
+		Clients(state){
 			return state.clients;
-		}
+		},
+		// Slots(state){
+		// 	return state.slots;
+		// },
+		// timeRange(state){
+		// 	return state.timeRange
+		// }
 	},
 	mutations:{
 		getWorkDays(state, days){
@@ -59,11 +70,16 @@ export const store = new Vuex.Store({
 		getStepperStep(state,step){
 			state.settings.stepperStep = step
 		},
-		storeSlots(state, slots){
-			state.slots = slots;
-		},
 		storeClients(state, clients){
-			state.clients = clients;
+			let momentTimeList = []
+			for ( let i=0; i<clients.length; i++){
+				let momentTime = moment(clients[i].time).format('LLLL');
+				momentTimeList.push(momentTime);
+			}
+			for (let j=0; j<clients.length; j++){
+				clients[j].time = momentTimeList[j]
+			}
+			return state.clients = clients;
 		},
 	},
 	actions:{
@@ -73,17 +89,6 @@ export const store = new Vuex.Store({
 		      console.log('res from get clients:', res);
 		      console.log('clients:', res.data.content);
 		      context.commit('storeClients', res.data.content)
-		    })
-		    .catch(error => {
-		      console.log( 'error:', error);
-		    })
-		},
-		loadSlots(context){
-			http.get('/slots')
-		    .then(res => {
-		      console.log('res from get slots:', res);
-		      console.log('slots:', res.data.content);
-		      context.commit('storeSlots', res.data.content)
 		    })
 		    .catch(error => {
 		      console.log( 'error:', error);
