@@ -20,9 +20,6 @@ export const store = new Vuex.Store({
 			dayRangeAvailable:[],
 			stepperStep:''
 		},
-		// slots: [],
-		// minTimeRange:{},
-		// timeRange:'',
 		clients:''
 	},
 	getters: {
@@ -32,12 +29,6 @@ export const store = new Vuex.Store({
 		Clients(state){
 			return state.clients;
 		},
-		// Slots(state){
-		// 	return state.slots;
-		// },
-		// timeRange(state){
-		// 	return state.timeRange
-		// }
 	},
 	mutations:{
 		getWorkDays(state, days){
@@ -84,9 +75,9 @@ export const store = new Vuex.Store({
 	},
 	actions:{
 		loadClients(context){
-			http.get('/clients')
+			http.get('apt/clients')
 		    .then(res => {
-		      console.log('res from get clients:', res);
+		      // console.log('res from get clients:', res);
 		      console.log('clients:', res.data.content);
 		      context.commit('storeClients', res.data.content)
 		    })

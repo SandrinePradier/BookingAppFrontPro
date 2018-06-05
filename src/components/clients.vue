@@ -60,11 +60,8 @@ export default {
     ...mapGetters([
        'Clients'
     ])
-      // clients(){
-      //   return this.$store.state.clients;
-      // }
   },
-  created(){
+  mounted(){
     this.$store.dispatch('loadClients');
   },
   filters:{

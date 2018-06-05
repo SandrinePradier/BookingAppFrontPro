@@ -102,14 +102,14 @@ export default {
        'Clients'
     ]),
   },
-  created(){
+  mounted(){
     this.callHttp();
   },
   methods:{
     callHttp(){
-       http.get('/slots')
+       http.get('slot/slots')
         .then(res => {
-        console.log('res from get slots:', res);
+        // console.log('res from get slots:', res);
         this.slots = res.data.content;
         this.minTimeRange = time.GetMinTimeFromSlotsArray(res.data.content);
         this.getTimeRange(this.minTimeRange);
@@ -123,7 +123,7 @@ export default {
       return this.timeRange = time.getTimeRange(tr);
     },
     setUpCalendar(){
-      console.log('jpl setUpCalendar');
+      // console.log('jpl setUpCalendar');
       this.beginDisplay = 0;
       this.weekNumber = time.filterInt(this.week);
       this.createButtonId(this.timeRange);
@@ -161,8 +161,8 @@ export default {
           this.buttonIdList.push(button);
         }
       }
-      console.log('buttonIdList ready');
-      console.log('buttonIdList', this.buttonIdList);
+      // console.log('buttonIdList ready');
+      // console.log('buttonIdList', this.buttonIdList);
       return this.buttonIdList;
     },
     updateButtonId: function(slots, idList, clients){
@@ -193,8 +193,8 @@ export default {
           }
         }
       }
-      console.log('buttonIdList updated ready');
-      console.log('this buttonIdList after update: ', this.buttonIdList);
+      // console.log('buttonIdList updated ready');
+      // console.log('this buttonIdList after update: ', this.buttonIdList);
       return this.buttonIdList;
       }
       else{
@@ -212,7 +212,7 @@ export default {
           }
         }
       }
-      console.log('filteredButtonList ready', this.filteredButtonIdList );
+      // console.log('filteredButtonList ready', this.filteredButtonIdList );
       return this.filteredButtonIdList;
     },
     buttonIdIsInDay: function(day,btn){

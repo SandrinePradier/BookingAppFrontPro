@@ -175,7 +175,7 @@ import * as time from './../../helpers/time'
       },
       sendSlotsToBack(){
         this.createAvailabilities();
-        http.post('/availabilities', this.slotsAvailable)
+        http.post('slot/availabilities', this.slotsAvailable)
           .then(res => {
             console.log('res from get ASstepper:', res);
              this.$store.dispatch('loadSlots');
