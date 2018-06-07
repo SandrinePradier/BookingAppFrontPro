@@ -4,7 +4,7 @@
 		<v-text-field color="white" type="text" v-model="username" name="username" placeholder="e-mail" :rules="usernameRules" autocomplete="off"/>
 		<v-text-field color="white" type="password" v-model="password" name="password" placeholder="password"
 		:rules="[v => !!v || 'Password requis']" autocomplete="off"/>
-		<v-btn outline color="white" v-on:click="logIn()" type="button">Log in</v-btn>
+		<v-btn outline class="btncol" color="white" v-on:click="logIn()" type="button">Log in</v-btn>
 		<v-btn outline color="white" v-on:click="$refs.form1.reset()" type="button">Annuler</v-btn>
 	</v-form>
 		</v-content>
@@ -76,6 +76,8 @@ import http from './../../helpers/http'
     -webkit-text-fill-color: white !important;
 }*/
 
-
+.btncol{
+  border:1px solid !important;
+}
 
 </style>
