@@ -23,7 +23,8 @@
             <v-flex class="dayNumber">{{day | dateFormatDayNumberAndMonth}}</v-flex>
             <ul class="slotUl" v-for="(button, index) in btnIdToDisplay" v-if="buttonIdIsInDay(day,button)" :key="index">
               <li class="slotLi">
-                <v-btn outline 
+                <v-btn outline
+                style="border:none"
                 v-bind:color="btnColor[index]" 
                 v-bind:class="classId[index]" 
                 v-bind:id="button" 
@@ -315,10 +316,7 @@ list-style-type: none;
 }
 
 .btn.btn--outline {
-   border-top: 1px dotted #e5e5e5;
-  border-bottom:1px dotted #e5e5e5;
-  border-left: 10px solid #64FFDA;
-  border-right: 1px solid #d4d4d4;
+   border:none !important;
 }
 
 .A{
