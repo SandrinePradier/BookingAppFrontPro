@@ -10,4 +10,9 @@ http.interceptors.request.use(config => {
   return config;
 });
 
+http.interceptors.response.use(res => {
+	console.log("Response Interceptor", res);
+	return res;
+});
+
 export default http;
