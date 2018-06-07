@@ -24,7 +24,6 @@
             <ul class="slotUl" v-for="(button, index) in btnIdToDisplay" v-if="buttonIdIsInDay(day,button)" :key="index">
               <li class="slotLi">
                 <v-btn outline
-                style="border:none"
                 v-bind:color="btnColor[index]" 
                 v-bind:class="classId[index]" 
                 v-bind:id="button" 
