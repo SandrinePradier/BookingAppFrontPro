@@ -67,7 +67,7 @@ export default {
     margin: auto;
    /*  padding: -16px; */
    /* width: 100%;*/
-/*}*/*/
+/*}*/
 
 .container {
   position: fixed; 

@@ -314,6 +314,9 @@ list-style-type: none;
   margin: 0;
 }
 
+.btn.btn--outline {
+    border: none;
+}
 
 .A{
   border-top: 1px dotted #e5e5e5;
