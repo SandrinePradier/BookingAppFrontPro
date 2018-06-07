@@ -315,7 +315,10 @@ list-style-type: none;
 }
 
 .btn.btn--outline {
-    border: none;
+   border-top: 1px dotted #e5e5e5;
+  border-bottom:1px dotted #e5e5e5;
+  border-left: 10px solid #64FFDA;
+  border-right: 1px solid #d4d4d4;
 }
 
 .A{
