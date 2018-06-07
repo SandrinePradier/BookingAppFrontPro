@@ -108,6 +108,7 @@ export default {
     ]),
   },
   mounted(){
+    this.$store.dispatch('loadClients');
     this.callHttp();
   },
   methods:{

@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 let http = axios.create({
-	baseURL: 'http://localhost:2707',
+	// baseURL: 'http://localhost:2707',
+	baseURL: 'https://mybookingappback.herokuapp.com'
 })
 
 http.interceptors.request.use(config => {
