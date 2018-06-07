@@ -7,7 +7,7 @@
     <v-flex class="msga"><h1>{{ msga }}</h1></v-flex>
     <v-flex class="msgb"><h5>{{ msgb }}</h5></v-flex>
     </v-layout>
-    <v-btn outline color="white" v-on:click.native="showLogin" :to="{name:'Landing'}" v-if="visible">LogIn</v-btn>
+    <v-btn style="border:solid 1px" outline color="white" v-on:click.native="showLogin" :to="{name:'Landing'}" v-if="visible">LogIn</v-btn>
     </v-content>
 
     <v-content class="signup">
