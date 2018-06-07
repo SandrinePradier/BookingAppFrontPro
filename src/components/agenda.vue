@@ -1,16 +1,17 @@
 <template>
   <v-container fluid class="backgound">
+    <!-- <v-progress-circular :value="80" indeterminate color="primary"></v-progress-circular> -->
     <v-card flat>
 
-      <v-toolbar color="green lighten-5"flat dense>
+      <v-toolbar class="toolbar" color="teal darken-1"flat dense>
         <v-toolbar-title>Agenda</v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-btn icon v-on:click="getPreviousDays">
-          <v-icon>navigate_before</v-icon>
+        <v-btn icon dark v-on:click="getPreviousDays">
+          <v-icon dark>navigate_before</v-icon>
         </v-btn>
         <h3>Semaine {{weekNumber}}</h3>
-        <v-btn icon v-on:click="getNextDays">
-          <v-icon>navigate_next</v-icon>
+        <v-btn icon dark v-on:click="getNextDays">
+          <v-icon >navigate_next</v-icon>
         </v-btn>
       </v-toolbar>
 
@@ -76,6 +77,10 @@ export default {
       console.log(this.timeRange.slice(this.beginDisplay, this.endDisplay));
       return this.timeRange.slice(this.beginDisplay, this.endDisplay);
     },
+    // now(){
+    //   // 60000
+    //   return this.getHour;
+    // },
     week(){
       return time.getWeekNumber(moment());
     },
@@ -109,7 +114,6 @@ export default {
     callHttp(){
        http.get('slot/slots')
         .then(res => {
-        // console.log('res from get slots:', res);
         this.slots = res.data.content;
         this.minTimeRange = time.GetMinTimeFromSlotsArray(res.data.content);
         this.getTimeRange(this.minTimeRange);
@@ -119,11 +123,13 @@ export default {
         console.log( 'error:', error);
         })
     },
+    // getHour(){
+    //   setInterval(()=>{ console.log(moment()) }, 3000);
+    // },
     getTimeRange(tr){
       return this.timeRange = time.getTimeRange(tr);
     },
     setUpCalendar(){
-      // console.log('jpl setUpCalendar');
       this.beginDisplay = 0;
       this.weekNumber = time.filterInt(this.week);
       this.createButtonId(this.timeRange);
@@ -182,7 +188,7 @@ export default {
             if(slots[i].status === 'booked'){
               idList[j].id = idList[j].id.slice(0,16)+'-'+'B';
               idList[j].class = 'B';
-              idList[j].color = 'deep-purple ';
+              idList[j].color = 'teal darken-1';
               for (let k=0; k<clients.length; k++){
                 let apt = moment(clients[k].time, 'LLLL').format('YYYY-MM-DD-HH-mm').toString();
                 if (id == apt){
@@ -193,8 +199,6 @@ export default {
           }
         }
       }
-      // console.log('buttonIdList updated ready');
-      // console.log('this buttonIdList after update: ', this.buttonIdList);
       return this.buttonIdList;
       }
       else{
@@ -212,11 +216,9 @@ export default {
           }
         }
       }
-      // console.log('filteredButtonList ready', this.filteredButtonIdList );
       return this.filteredButtonIdList;
     },
     buttonIdIsInDay: function(day,btn){
-      // this is a conditional function, called in V-for to display under the day only the button with ID matching the day
       console.log('buttonIsInDay ready');
       let a = moment(day).format('YYYY-MM-DD').toString();
       let b = btn.id.slice(0,10);
@@ -225,7 +227,6 @@ export default {
       }
     },
     getMatchingSlot: function(btn, slots){
-      console.log('j actionne le buttonId', btn);
         for (let i=0; i<slots.length; i++){
           let sl = moment(slots[i].start).format('YYYY-MM-DD-HH-mm').toString();
           let id = btn.id.slice(0,16);
@@ -235,18 +236,34 @@ export default {
           }
         }
     },
+    getNextMeeting(clients){
+      console.log('jpl next meeting');
+      let nextMeeting = '';
+      for (let i=0; i<clients.length; i++){
+        let rdv = moment(clients[i].time,'LLLL');
+        let rdvAfter =  moment(clients[i].time,'LLLL').add(moment(clients[i].time,'LLLL'), 'minutes');
+        if ( this.now.isAfter(rdv) && this.now.isBefore(rdvAfter)){
+        nextMeeting = client[i].time;
+        console.log('nextMeeting:', nextMeeting);
+        return nextMeeting
+        }
+      }
+     }
   },
   filters: {
-    dateFormatDayName: function(date) {
+    dateFormatDayName(date) {
       return moment(date).format('dddd');
     },
-    dateFormatDayNumberAndMonth: function(date) {
+    dateFormatDayNumberAndMonth(date) {
       return moment(date).format('D MMM');
     },
-    formatDayHour: function(date) {
+    formatDayHour(date) {
       return moment(date).format('lll');
     },
-    displayButtonId: function(id){
+    formatHour(hour){
+      return moment(hour).format('HH:mm');
+    },
+    displayButtonId(id){
       return id.slice(11,16);
     }
   }
@@ -258,44 +275,38 @@ export default {
 
 <style scoped>
 
-.background{
-  color: #606060;
-}
-
 
 h1, h2{
   font-weight: normal;
   color: #404040;
 }
 
-h3{
-  color: #404040;
+
+.background{
+  color: #606060;
 }
 
+.toolbar{
+  color:white;
+}
 
 
 .day{
   min-width: 13%;
-  /*background-color: pink;*/
   padding: 0;
   margin: 0;
 }
 
 
 .dayName{
-  /*font-weight: bold*/
   color: #606060;
-/*background-color: purple;
-*/}
+}
 
 .dayNumber{
   color: #606060;
-  /*font-weight: bold*/
-/*background-color: green;*/
 }
 
 .slotUl{
-/*background-color: blue;*/
 width: 100%;
 list-style-type: none;
   padding: 0;
@@ -308,15 +319,12 @@ list-style-type: none;
   border-bottom:1px dotted #e5e5e5;
   border-left: 10px solid #64FFDA;
   border-right: 1px solid #d4d4d4;
-  /*background-color: white;*/
-  /*color:grey;*/
   border-radius:0;
   width: 100%;
   margin-bottom: 0px;
   margin-top: 0px;
   margin-left:0px;
   font-size: 10px;
-  /*text-align: right;*/
   vertical-align: top
 }
 
@@ -325,39 +333,30 @@ list-style-type: none;
   border-bottom:1px dotted #e5e5e5;
   border-left: 1px solid #d4d4d4;
   border-right: 1px solid #d4d4d4;
-  /*box-shadow: none;*/
-  /*box-shadow: 0.5rem 1rem 1rem rgba(0, 0, 0, 0.1);*/
- /* background-color: grey;*/
-  /*color:grey;*/
   border-radius:0;
   width: 100%;
   margin-bottom: 0px;
   margin-top: 0px;
   margin-left:0px;
   font-size: 8px;
-  /*text-align: right;*/
   vertical-align: top;
 }
 
 .B{
   border-top: 1px dotted #e5e5e5;
   border-bottom:1px dotted #e5e5e5;
-  border-left: 10px solid #673AB7;
+  border-left: 10px solid #00897B;
   border-right: 1px solid #d4d4d4;
-  /*background-color: yellow;*/
-  /*color:grey;*/
   border-radius:0;
   width: 100%;
   margin-bottom: 0px;
   margin-top: 0px;
   margin-left:0px;
   font-size: 10px;
-  /*text-align: right;*/
   vertical-align: top;
 }
 
 .slotLi{
-  /*background-color: transparent;*/
   width: 100%;
 }
 
@@ -365,34 +364,6 @@ list-style-type: none;
   text-align: left;
   width: 100%;
 }
-
-
-
-/*{
-  primary: "#64FFDA",
-  secondary: "#E8F5E9",
-  accent: "#64FFDA",
-  error: "#FF5722",
-  warning: "#ffeb3b",
-  info: "#009688",
-  success: "#4CAF50"
-}
-*/
-/*{
-  primary: colors.teal.accent2,
-  secondary: colors.green.lighten5,
-  accent: colors.teal.accent2,
-  error: colors.deepOrange.base,
-  warning: colors.yellow.base,
-  info: colors.teal.base,
-  success: colors.green.base
-}*/
-
-/*gris à essayer:
-#606060 rgb(96,96,96)
-#686868 rgb(104,104,104)
-#696969 rgb(105,105,105)*/
-
 
 
 </style>

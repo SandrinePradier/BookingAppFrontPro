@@ -5,16 +5,15 @@
     <v-layout class="text" column wrap justify-center>
     <v-flex class="msg"><h1>{{ msg }}</h1></v-flex>
     <v-flex class="msga"><h1>{{ msga }}</h1></v-flex>
+    <v-flex class="msgb"><h5>{{ msgb }}</h5></v-flex>
     </v-layout>
-    <v-btn outline color="white" v-if="visible" v-on:click.native="showLogin" :to="{name:'Landing'}">LogIn</v-btn>
-    <v-btn outline color="white" v-if="!visible" v-on:click.native="showSignUp" :to="{name:'Landing'}">SignUp</v-btn>
+    <v-btn outline color="white" v-on:click.native="showLogin" :to="{name:'Landing'}" v-if="visible">LogIn</v-btn>
     </v-content>
 
     <v-content class="signup">
-      <signup v-bind:displaySignup="visible" v-on:signUpValidate="updateVisible($event)" v-if="visible"></signup>
     </v-content>
     <v-content class="login">
-      <login v-bind:displayLogin="!visible" v-if="!visible"></login>
+      <login v-if="!visible"></login>
     </v-content>
   </v-container>
 </template>
@@ -34,24 +33,13 @@ export default {
     return {
      msg:'Bienvenue',
      msga:'sur MyBookingApp !',
+     msgb:'MyBookingApp est une application qui permet de proposer une prise de rendez-vous en ligne à vos clients.',
      visible: true,
     }
   },
   methods:{
     showLogin: function() {
-        // console.log( 'this.visible :', this.visible)
-        // console.log ('jaffiche le compoment login');
         this.visible = !this.visible;
-        // console.log('this visible after click: ,', this.visible)
-      },
-      showSignUp: function() {
-        // console.log( 'this.visible :', this.visible)
-        // console.log ('jaffiche le compoment signUp');
-        this.visible = !this.visible;
-        // console.log('this visible after click: ,', this.visible)
-      },
-      updateVisible: function(updatedVisible){
-        this.visible = updatedVisible;
       }
   }
 };
@@ -61,16 +49,15 @@ export default {
 <style scoped>
 
 .hello{
-  /*background-image: linear-gradient(to right, #43e97b 0%, #38f9d7 100%);*/
-  background-image: linear-gradient(to top, #37ecba 0%, #72afd3 100%);
-  /*background-image: linear-gradient(to top, #9890e3 0%, #b1f4cf 100%);*/
+  background-image: linear-gradient(to top, #64FFDA 0%, #00897B 100%);
   height: 100%;
   color:white;
 }
 
 .text{
-  margin-top: 30vh;
+  margin-top: 25vh;
 }
+
 
 h1 {
   text-align: center;
@@ -79,10 +66,11 @@ h1 {
   font-weight: 1200;
   font-size: 60px;
   line-height: 60px;
- 
 }
 
-.msga{
+
+
+.msgb{
   margin-bottom: 5vh;
 }
 
