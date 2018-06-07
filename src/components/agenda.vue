@@ -315,15 +315,15 @@ list-style-type: none;
   margin: 0;
 }
 
-.btn.btn--outline {
+/*.btn.btn--outline {
    border:none !important;
-}
+}*/
 
 .A{
-  border-top: 1px dotted #e5e5e5;
-  border-bottom:1px dotted #e5e5e5;
-  border-left: 10px solid #64FFDA;
-  border-right: 1px solid #d4d4d4;
+  border-top: 1px dotted #e5e5e5!important;
+  border-bottom:1px dotted #e5e5e5!important;
+  border-left: 10px solid #64FFDA!important;
+  border-right: 1px solid #d4d4d4!important;
   border-radius:0;
   width: 100%;
   margin-bottom: 0px;
@@ -334,10 +334,10 @@ list-style-type: none;
 }
 
 .N{
-  border-top: 1px dotted #e5e5e5;
-  border-bottom:1px dotted #e5e5e5;
-  border-left: 1px solid #d4d4d4;
-  border-right: 1px solid #d4d4d4;
+  border-top: 1px dotted #e5e5e5!important;
+  border-bottom:1px dotted #e5e5e5!important;
+  border-left: 1px solid #d4d4d4!important;
+  border-right: 1px solid #d4d4d4!important;
   border-radius:0;
   width: 100%;
   margin-bottom: 0px;
@@ -348,10 +348,10 @@ list-style-type: none;
 }
 
 .B{
-  border-top: 1px dotted #e5e5e5;
-  border-bottom:1px dotted #e5e5e5;
-  border-left: 10px solid #00897B;
-  border-right: 1px solid #d4d4d4;
+  border-top: 1px dotted #e5e5e5!important;
+  border-bottom:1px dotted #e5e5e5!important;
+  border-left: 10px solid #00897B!important;
+  border-right: 1px solid #d4d4d4!important;
   border-radius:0;
   width: 100%;
   margin-bottom: 0px;
