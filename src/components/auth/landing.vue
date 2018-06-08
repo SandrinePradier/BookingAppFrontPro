@@ -73,8 +73,8 @@ h1 {
   margin-bottom: 5vh;
 }
 
-.btncol{
+/*.btncol{
   border:1px solid !important;
-}
+}*/
 
 </style>

@@ -76,8 +76,8 @@ import http from './../../helpers/http'
     -webkit-text-fill-color: white !important;
 }*/
 
-.btncol{
+/*.btncol{
   border:1px solid !important;
-}
+}*/
 
 </style>
